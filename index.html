@@ -1,0 +1,137 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>HomeFood</title>
+    
+	<link rel="stylesheet" href="themes/homefood.min.css" />
+	<link rel="stylesheet" href="themes/jquery.mobile.icons.min.css" />
+	<link rel="stylesheet" href="themes/jquery.mobile.structure-1.4.5.min.css" />
+
+    <script type="text/javascript" src="phonegap.js"></script>
+	<script src="scripts/jquery-1.11.1.min.js"></script>
+	<script src="scripts/jquery.mobile-1.4.5.min.js"></script>
+    
+<script type="text/javascript">
+
+    // alert dialog dismissed
+    function alertDismissed() {
+        intervalId = setInterval('beolvasas()',15*1000);
+    }
+	
+	
+    function showAlert() {
+        navigator.notification.beep(1);
+        navigator.notification.vibrate(1000);
+//		window.plugin.notification.local.add({ message: 'Új rendelés érkezett!' });
+    }
+
+
+
+var options = {
+  enableHighAccuracy: true,
+  timeout: 5000,
+  maximumAge: 0
+};
+
+function success(pos) {
+  var crd = pos.coords;
+  var id = 1;
+//  showAlert();
+//  console.log('Your current position is:');
+//  console.log('Latitude : ' + crd.latitude);
+//  console.log('Longitude: ' + crd.longitude);
+//  console.log('More or less ' + crd.accuracy + ' meters.');
+		$.ajax({
+		  url: 'http://www.webpecs.hu/fry_pozicio.php',
+		  data: { id: id, lat: crd.latitude, long: crd.longitude },
+		  dataType: 'html',
+		  success: function(data) {
+//  		  	$("#contentchange").html(data);
+		  }
+		});
+
+};
+
+function error(err) {
+  console.warn('ERROR(' + err.code + '): ' + err.message);
+};
+
+function helyzet() {
+	navigator.geolocation.getCurrentPosition(success, error, options);
+}
+
+
+		
+	 function contentLoad(oldal,header) {
+		if (oldal=='figyeles') {
+			$("#footer").html($("#vissza").html());
+			$("#contentchange").load('http://www.webpecs.hu/fry_rendelesek.php');
+			intervalId = setInterval('beolvasas()',15*1000);
+//			hintervalId = setInterval('helyzet()',15*1000);
+		}
+		if (oldal=='rendeles') {
+			$("#footer").html($("#vissza").html());
+		}
+		if (oldal=='index') {
+		  	clearInterval(intervalId);
+			$("#footer").html('');
+		}
+		oldal = '#'+oldal;
+		$("#header h1").html(header);
+		$("#contentchange").html($(oldal).html());
+	  }
+		  
+		  
+	
+	
+	function beolvasas() {
+		$.ajax({
+		  url: 'http://www.webpecs.hu/fry_rendelesek.php',
+		  dataType: 'html',
+		  success: function(data) {
+			if (data != '') {
+	  		  	$("#contentchange").html(data);
+				if (data.indexOf("OK") !== -1) {
+//				  	clearInterval(intervalId);
+				    showAlert();
+				}
+			}
+		  }
+		});
+	}
+	
+</script>    
+</head>
+
+<body>
+
+<!-- Start of first page: #one -->
+<div data-role="page" id="one">
+
+	<div data-role="header">
+		<h1>HomeFood</h1>
+	</div><!-- /header -->
+
+	<div role="main" class="ui-content">
+		<h2>Rendelések</h2>
+        
+        <div id="contentchange"></div>
+
+	</div><!-- /content -->
+
+	<div data-role="footer" data-theme="a">
+		<h4>Lábléc</h4>
+	</div><!-- /footer -->
+</div><!-- /page one -->
+
+
+<script type="text/javascript">
+	intervalId = setInterval('beolvasas()',15*1000);
+	window.plugin.backgroundMode.enable();
+</script>
+</body>
+</html>
