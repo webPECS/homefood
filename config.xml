@@ -60,6 +60,6 @@
 
 
     <access origin="*" /> <!-- allow local pages -->
-    <access origin="*://webpecs.hu/*" />
+    <access origin="*://homefood.hu/*" />
 
 </widget>

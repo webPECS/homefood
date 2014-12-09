@@ -23,9 +23,8 @@
 	
 	
     function showAlert() {
-        navigator.notification.beep(1);
-        navigator.notification.vibrate(1000);
-//		window.plugin.notification.local.add({ message: 'Új rendelés érkezett!' });
+        navigator.notification.beep(2);
+//        navigator.notification.vibrate(1000);
     }
 
 
@@ -45,7 +44,7 @@ function success(pos) {
 //  console.log('Longitude: ' + crd.longitude);
 //  console.log('More or less ' + crd.accuracy + ' meters.');
 		$.ajax({
-		  url: 'http://www.webpecs.hu/fry_pozicio.php',
+		  url: 'http://www.homefood.hu/pozicio.php',
 		  data: { id: id, lat: crd.latitude, long: crd.longitude },
 		  dataType: 'html',
 		  success: function(data) {
@@ -64,37 +63,15 @@ function helyzet() {
 }
 
 
-		
-	 function contentLoad(oldal,header) {
-		if (oldal=='figyeles') {
-			$("#footer").html($("#vissza").html());
-			$("#contentchange").load('http://www.webpecs.hu/fry_rendelesek.php');
-			intervalId = setInterval('beolvasas()',15*1000);
-//			hintervalId = setInterval('helyzet()',15*1000);
-		}
-		if (oldal=='rendeles') {
-			$("#footer").html($("#vissza").html());
-		}
-		if (oldal=='index') {
-		  	clearInterval(intervalId);
-			$("#footer").html('');
-		}
-		oldal = '#'+oldal;
-		$("#header h1").html(header);
-		$("#contentchange").html($(oldal).html());
-	  }
-		  
-		  
-	
 	
 	function beolvasas() {
 		$.ajax({
-		  url: 'http://www.webpecs.hu/fry_rendelesek.php',
+		  url: 'http://www.homefood.hu/phonegap/uj_rendeles_van_e.php',
 		  dataType: 'html',
 		  success: function(data) {
 			if (data != '') {
 	  		  	$("#contentchange").html(data);
-				if (data.indexOf("OK") !== -1) {
+				if (data.indexOf("rendel") !== -1) {
 //				  	clearInterval(intervalId);
 				    showAlert();
 				}
@@ -116,7 +93,6 @@ function helyzet() {
 	</div><!-- /header -->
 
 	<div role="main" class="ui-content">
-		<h2>Rendelések</h2>
         
         <div id="contentchange"></div>
 
