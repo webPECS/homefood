@@ -23,7 +23,7 @@
 	
 	
     function showAlert() {
-        navigator.notification.beep(2);
+        navigator.notification.beep(1);
 //        navigator.notification.vibrate(1000);
     }
 
@@ -62,11 +62,6 @@ function helyzet() {
 	navigator.geolocation.getCurrentPosition(success, error, options);
 }
 
-	function proba() {
-		var data = '<div data-role="collapsible-set"><div data-role="collapsible" data-mini="true"><h3>Új rendelés</h3><p>varos, utca hszam<br>ar Ft<br>ido</p></div></div>';
-	  	$(".content").html(data).trigger('create')
-	}
-
 	
 	function beolvasas() {
 		var output = '';
@@ -74,16 +69,16 @@ function helyzet() {
 		  url: 'http://www.homefood.hu/phonegap/uj_rendeles_van_e.php',
 //		  url: 'proba.json',
 		  type: 'GET',
-		  data: { ids: window.ids },
+		  data: { ids: ids },
 		  dataType: 'json',
 		  success: function(data) {
             if (data.rendelesek != 'null') {
-			  window.ids = '';
+			  ids = '';
 			  showAlert();
 				var index;
 				output = '<div data-role="collapsible-set">';
 				for (index = 0; index < data.rendelesek.length; ++index) {
-				   window.ids += data.rendelesek[index].id + ',';
+				   ids += data.rendelesek[index].id + ',';
 				   output += '<div data-role="collapsible" data-mini="true"><h3>Új rendelés</h3><p>';
 				   output += data.rendelesek[index].varos + '<br>';
 				   output += data.rendelesek[index].utca + '<br>';
@@ -124,7 +119,9 @@ function helyzet() {
 
 
 <script type="text/javascript">
-	intervalId = setInterval('beolvasas()',5*1000);
+   var ids = '';
+   beolvasas();
+   intervalId = setInterval('beolvasas()',15*1000);
 //	window.plugin.backgroundMode.enable();
 </script>
 </body>
