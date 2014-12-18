@@ -33,7 +33,7 @@
 	
     function showAlert() {
         navigator.notification.beep(1);
-//        navigator.notification.vibrate(1000);
+        navigator.notification.vibrate(1000);
     }
 
 
@@ -86,7 +86,7 @@ function helyzet() {
 			if (data.futar_id>0) {
               if (data.rendelesek != null) {
 	  		    ids = '';
-//			    showAlert();
+			    showAlert();
 				var index;
 				output = '<div data-role="collapsible-set">';
 				for (index = 0; index < data.rendelesek.length; ++index) {
@@ -120,7 +120,7 @@ function UserPassStore() {
   window.localStorage.setItem("password", window.password);
   
   beolvasas();
-  intervalId = setInterval('beolvasas()',5*1000);
+  intervalId = setInterval('beolvasas()',15*1000);
 }
 
 function Back() {
@@ -185,7 +185,7 @@ function Back() {
   $("#password").val(window.password);
 
 //$( document ).ready(function() {
-//  window.plugin.backgroundMode.enable();
+  window.plugin.backgroundMode.enable();
 // });
 </script>
 </body>
