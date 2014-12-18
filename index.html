@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 
@@ -9,10 +8,20 @@
     
 	<link rel="stylesheet" href="themes/homefood.min.css" />
 	<link rel="stylesheet" href="themes/jquery.mobile.structure-1.4.5.min.css" />
-
+	<link rel="stylesheet" href="themes/jquery.mobile.icons.min.css" />
+    
     <script type="text/javascript" src="phonegap.js"></script>
 	<script src="scripts/jquery-1.11.1.min.js"></script>
+
+    <script>
+      $( document ).on( "mobileinit", function() {
+        $.mobile.allowCrossDomainPages = true;
+      });
+    </script>    
+    
 	<script src="scripts/jquery.mobile-1.4.5.min.js"></script>
+    
+
     
 <script type="text/javascript">
 
@@ -65,33 +74,59 @@ function helyzet() {
 	
 	function beolvasas() {
 		var output = '';
+		
 		$.ajax({
 		  url: 'http://www.homefood.hu/phonegap/uj_rendeles_van_e.php',
 //		  url: 'proba.json',
 		  type: 'GET',
-		  data: { ids: ids },
-		  dataType: 'json',
+		  data: { ids: ids, user: window.username, passw: window.password },
+		  dataType: 'jsonp',
+		  jsonpCallback: 'jsonCallback',
 		  success: function(data) {
-            if (data.rendelesek != 'null') {
-			  ids = '';
-			  showAlert();
+			if (data.futar_id>0) {
+              if (data.rendelesek != null) {
+	  		    ids = '';
+//			    showAlert();
 				var index;
 				output = '<div data-role="collapsible-set">';
 				for (index = 0; index < data.rendelesek.length; ++index) {
 				   ids += data.rendelesek[index].id + ',';
-				   output += '<div data-role="collapsible" data-iconpos="right"><h3>Új rendelés</h3><p>';
-				   output += data.rendelesek[index].varos + '<br>';
-				   output += data.rendelesek[index].utca + '<br>';
-				   output += data.rendelesek[index].hszam + '<br>';
+				   perc = Math.round((data.ido-data.rendelesek[index].ido)/60);
+				   output += '<div data-role="collapsible" data-iconpos="right"><h3>Új rendelés (<span class="ido">' + perc + ' perce</span>)</h3><p>';
+				   output += data.rendelesek[index].varos + ', ';
+				   output += data.rendelesek[index].utca + ' ';
+				   output += data.rendelesek[index].hszam + '.<br>';
 				   output += data.rendelesek[index].ar + ' Ft<br>';
-				   output += '</p></div></div>';
+				   output += '</p><a href="#" data-role="button" data-icon="check" data-inline="true">Átveszem</a></div>';
 				}
 				output += '</div>';
-			  	$(".content").html(output).trigger('create')
+			  	$("#two .content").html(output).trigger('create');
+			  } 
+			} else {
+				output = '<p><strong>Hiba!</strong></p>';
+				output += '<p>A felhasználónév vagy a jelszó nem megfelelő.</p>';
+                output += '<p><a href="#one" data-role="button" data-icon="back" data-inline="true" onclick="Back()">Vissza</a></p>';
+			  	$("#two .content").html(output).trigger('create');
 			}
 		  }
 		});
 	}
+	
+function UserPassStore() {
+  window.username = $("#username").val();
+  window.localStorage.setItem("username", window.username);
+
+  window.password = $("#password").val();
+  window.localStorage.setItem("password", window.password);
+  
+  beolvasas();
+  intervalId = setInterval('beolvasas()',5*1000);
+}
+
+function Back() {
+  $("#two .content").html('');
+  clearInterval(intervalId);
+}
 	
 </script>    
 </head>
@@ -106,23 +141,52 @@ function helyzet() {
 	</div><!-- /header -->
 
 	<div role="main" class="content">
-        
-        
-        
+    
+    <p>Kérlek jelentkezz be:</p>
+    
+    <div data-role="fieldcontain" class="ui-hide-label">
+	<label for="username">Felhasználónév:</label>
+	<input type="text" name="username" id="username" value="" placeholder="Felhasználónév"/>
+    </div>
+    
+    <div data-role="fieldcontain" class="ui-hide-label">
+	<label for="password">Jelszó:</label>
+	<input type="text" name="password" id="password" value="" placeholder="Jelszó"/>
+    </div>
 
+    <a href="#two" data-role="button" data-icon="forward" onClick="UserPassStore();">Bejelentkezés</a>
+    
 	</div><!-- /content -->
 
-	<div data-role="footer" data-theme="a">
-		<h4>Lábléc</h4>
-	</div><!-- /footer -->
+</div><!-- /page one -->
+
+<!-- Start of first page: #one -->
+<div data-role="page" id="two">
+
+	<div data-role="header">
+		<h1>HomeFood</h1>
+	</div><!-- /header -->
+
+	<div role="main" class="content">
+        
+	</div><!-- /content -->
+
 </div><!-- /page one -->
 
 
 <script type="text/javascript">
-   var ids = '';
-   beolvasas();
-   intervalId = setInterval('beolvasas()',15*1000);
-//	window.plugin.backgroundMode.enable();
+  var ids = '';
+
+
+  //felhasználónév és jelszó tárolása
+  window.username = window.localStorage.getItem("username");
+  $("#username").val(window.username);
+  window.password = window.localStorage.getItem("password");
+  $("#password").val(window.password);
+
+//$( document ).ready(function() {
+//  window.plugin.backgroundMode.enable();
+// });
 </script>
 </body>
 </html>
