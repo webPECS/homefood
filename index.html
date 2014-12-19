@@ -77,13 +77,14 @@ function helyzet() {
 		
 		$.ajax({
 		  url: 'http://www.homefood.hu/phonegap/uj_rendeles_van_e.php',
-//		  url: 'proba.json',
 		  type: 'GET',
-		  data: { ids: ids, user: window.username, passw: window.password },
+		  data: { ids: ids, aids: aids, user: window.username, passw: window.password },
 		  dataType: 'jsonp',
 		  jsonpCallback: 'jsonCallback',
 		  success: function(data) {
 			if (data.futar_id>0) {
+			  output = '';
+			  
               if (data.rendelesek != null) {
 	  		    ids = '';
 			    showAlert();
@@ -97,11 +98,32 @@ function helyzet() {
 				   output += data.rendelesek[index].utca + ' ';
 				   output += data.rendelesek[index].hszam + '.<br>';
 				   output += data.rendelesek[index].ar + ' Ft<br>';
-				   output += '</p><a href="#" data-role="button" data-icon="check" data-inline="true">Átveszem</a></div>';
+				   output += '</p><button data-icon="check" data-inline="true" onclick="StatusChange(' + data.rendelesek[index].id + ',' + data.futar_id + ',\'at\')">Átveszem</button></div>';
 				}
 				output += '</div>';
-			  	$("#two .content").html(output).trigger('create');
 			  } 
+
+              if (data.atvettek != null) {
+  	  		    aids = '';
+				var index;
+				output += '<div data-role="collapsible-set">';
+				for (index = 0; index < data.atvettek.length; ++index) {
+				   aids += data.atvettek[index].id + ',';
+				   perc = Math.round((data.ido-data.atvettek[index].ido)/60);
+				   output += '<div data-role="collapsible" data-iconpos="right"><h3>Átvett rendelés (<span class="ido">' + perc + ' perce</span>)</h3><p>';
+				   output += data.atvettek[index].varos + ', ';
+				   output += data.atvettek[index].utca + ' ';
+				   output += data.atvettek[index].hszam + '.<br>';
+				   output += data.atvettek[index].ar + ' Ft<br>';
+				   output += '</p><button data-icon="check" data-inline="true" onclick="StatusChange(' + data.atvettek[index].id + ',' + data.futar_id + ',\'ki\')">Kiszállítottam</button></div>';
+				}
+				output += '</div>';
+			  } 
+
+				if (output!='') {
+			  	  $("#two .content").html(output).trigger('create');
+				}
+
 			} else {
 				output = '<p><strong>Hiba!</strong></p>';
 				output += '<p>A felhasználónév vagy a jelszó nem megfelelő.</p>';
@@ -126,6 +148,25 @@ function UserPassStore() {
 function Back() {
   $("#two .content").html('');
   clearInterval(intervalId);
+}
+
+function StatusChange(rendeles,futar,stat) {
+  $.mobile.loading("show");
+  $.ajax({
+    url: 'http://www.homefood.hu/phonegap/atveszem.php',
+    type: 'GET',
+    dataType: 'jsonp',
+    jsonpCallback: 'jsonCallback',
+    data: { id: rendeles, futar: futar, stat: stat },
+    success: function(data) {
+	  if (data.siker == 'true') {
+		ids = '';
+		aids = '';
+		beolvasas('igen');
+        $.mobile.loading("hide");
+	  }
+    }
+  })
 }
 	
 </script>    
@@ -176,6 +217,7 @@ function Back() {
 
 <script type="text/javascript">
   var ids = '';
+  var aids = '';
 
 
   //felhasználónév és jelszó tárolása
@@ -184,9 +226,8 @@ function Back() {
   window.password = window.localStorage.getItem("password");
   $("#password").val(window.password);
 
-//$( document ).ready(function() {
   window.plugin.backgroundMode.enable();
-// });
+
 </script>
 </body>
 </html>
