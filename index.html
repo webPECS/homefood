@@ -97,8 +97,16 @@ function helyzet() {
 				   output += data.rendelesek[index].varos + ', ';
 				   output += data.rendelesek[index].utca + ' ';
 				   output += data.rendelesek[index].hszam + '.<br>';
-				   output += data.rendelesek[index].ar + ' Ft<br>';
-				   output += '</p><button data-icon="check" data-inline="true" onclick="StatusChange(' + data.rendelesek[index].id + ',' + data.futar_id + ',\'at\')">Átveszem</button></div>';
+				   output += data.rendelesek[index].ar + ' Ft<br></p>';
+				   output += '<fieldset data-role="controlgroup" data-type="horizontal">';
+				   output += '<select name="atid' + data.rendelesek[index].id + '" id="atid' + data.rendelesek[index].id + '">';
+				   for (i = 5; i <= 40; i+=5) { 
+				     output += '<option value="' + i + '">' + i + ' perc múlva</option>';
+				   }
+				   output += '</select>';
+				   output += '<button data-icon="check" data-inline="true" onclick="StatusChange(' + data.rendelesek[index].id + ',' + data.futar_id + ',\'at\')">Átveszem</button>';
+				   output += '</fieldset>';
+				   output += '</div>';
 				}
 				output += '</div>';
 			  } 
@@ -119,6 +127,10 @@ function helyzet() {
 				}
 				output += '</div>';
 			  } 
+			  
+  			    if (ids=='' && aids=='') {
+				  output = '  ';
+			    }
 
 				if (output!='') {
 			  	  $("#two .content").html(output).trigger('create');
@@ -152,12 +164,13 @@ function Back() {
 
 function StatusChange(rendeles,futar,stat) {
   $.mobile.loading("show");
+  if (stat=='at') { perc = $('#atid'+rendeles).val(); } else { perc = 0; }
   $.ajax({
     url: 'http://www.homefood.hu/phonegap/atveszem.php',
     type: 'GET',
     dataType: 'jsonp',
     jsonpCallback: 'jsonCallback',
-    data: { id: rendeles, futar: futar, stat: stat },
+    data: { id: rendeles, futar: futar, stat: stat, perc: perc },
     success: function(data) {
 	  if (data.siker == 'true') {
 		ids = '';
