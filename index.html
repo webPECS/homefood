@@ -100,7 +100,8 @@ function helyzet() {
 				   output += data.rendelesek[index].ar + ' Ft<br></p>';
 				   output += '<select data-inline="true"  data-native-menu="false" name="atid' + data.rendelesek[index].id + '" id="atid' + data.rendelesek[index].id + '" onchange="StatusChange(' + data.rendelesek[index].id + ',' + data.futar_id + ',\'va\')">';
 				     output += '<option>Megyek érte</option>';
-				   for (i = 5; i <= 40; i+=5) { 
+           perc = parseInt(data.rendelesek[index].perc);
+				   for (i = perc; i <= 40; i+=5) { 
 				     output += '<option value="' + i + '">' + i + ' perc múlva</option>';
 				   }
 				   output += '</select>';
