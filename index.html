@@ -94,10 +94,11 @@ function helyzet() {
 				   ids += data.rendelesek[index].id + ',';
 				   perc = Math.round((data.ido-data.rendelesek[index].ido)/60);
 				   output += '<div data-role="collapsible" data-iconpos="right"><h3>Új rendelés (<span class="ido">' + perc + ' perce</span>)</h3><p>';
+				   output += '<strong>' + data.rendelesek[index].etterem + '</strong><br /> ';
 				   output += data.rendelesek[index].varos + ', ';
 				   output += data.rendelesek[index].utca + ' ';
-				   output += data.rendelesek[index].hszam + '.<br>';
-				   output += data.rendelesek[index].ar + ' Ft<br></p>';
+				   output += data.rendelesek[index].hszam + '.<br />';
+				   output += data.rendelesek[index].ar + ' Ft<br /></p>';
 				   output += '<select data-inline="true"  data-native-menu="false" name="atid' + data.rendelesek[index].id + '" id="atid' + data.rendelesek[index].id + '" onchange="StatusChange(' + data.rendelesek[index].id + ',' + data.futar_id + ',\'va\')">';
 				     output += '<option>Megyek érte</option>';
            perc = parseInt(data.rendelesek[index].perc);
@@ -119,10 +120,11 @@ function helyzet() {
 				   vids += data.varakozok[index].id + ',';
 				   perc = Math.round((data.ido-data.varakozok[index].ido)/60);
 				   output += '<div data-role="collapsible" data-iconpos="right"><h3>Várakozó rendelés (<span class="ido">' + perc + ' perce</span>)</h3><p>';
+				   output += '<strong>' + data.varakozok[index].etterem + '</strong><br /> ';
 				   output += data.varakozok[index].varos + ', ';
 				   output += data.varakozok[index].utca + ' ';
-				   output += data.varakozok[index].hszam + '.<br>';
-				   output += data.varakozok[index].ar + ' Ft<br>';
+				   output += data.varakozok[index].hszam + '.<br />';
+				   output += data.varakozok[index].ar + ' Ft<br />';
 				   output += '</p><button data-icon="check" data-inline="true" onclick="StatusChange(' + data.varakozok[index].id + ',' + data.futar_id + ',\'at\')">Átvettem</button></div>';
 				}
 				output += '</div>';
@@ -138,10 +140,11 @@ function helyzet() {
 				   aids += data.atvettek[index].id + ',';
 				   perc = Math.round((data.ido-data.atvettek[index].ido)/60);
 				   output += '<div data-role="collapsible" data-iconpos="right"><h3>Átvett rendelés (<span class="ido">' + perc + ' perce</span>)</h3><p>';
+				   output += '<strong>' + data.atvettek[index].etterem + '</strong><br /> ';
 				   output += data.atvettek[index].varos + ', ';
 				   output += data.atvettek[index].utca + ' ';
-				   output += data.atvettek[index].hszam + '.<br>';
-				   output += data.atvettek[index].ar + ' Ft<br>';
+				   output += data.atvettek[index].hszam + '.<br />';
+				   output += data.atvettek[index].ar + ' Ft<br />';
 				   output += '</p><button data-icon="check" data-inline="true" onclick="StatusChange(' + data.atvettek[index].id + ',' + data.futar_id + ',\'ki\')">Kiszállítottam</button></div>';
 				}
 				output += '</div>';
