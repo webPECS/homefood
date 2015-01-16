@@ -2,22 +2,22 @@
 <html>
 
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>HomeFood</title>
     
 	<link rel="stylesheet" href="themes/homefood.min.css" />
 	<link rel="stylesheet" href="themes/jquery.mobile.structure-1.4.5.min.css" />
 	<link rel="stylesheet" href="themes/jquery.mobile.icons.min.css" />
     
-    <script type="text/javascript" src="phonegap.js"></script>
+  <script type="text/javascript" src="phonegap.js"></script>
 	<script src="scripts/jquery-1.11.1.min.js"></script>
 
-    <script>
-      $( document ).on( "mobileinit", function() {
-        $.mobile.allowCrossDomainPages = true;
-      });
-    </script>    
+  <script>
+    $( document ).on( "mobileinit", function() {
+      $.mobile.allowCrossDomainPages = true;
+    });
+  </script>    
     
 	<script src="scripts/jquery.mobile-1.4.5.min.js"></script>
     
@@ -87,13 +87,13 @@ function helyzet() {
 			  
        if (data.rendelesek != null) {
  		    ids = '';
-		    showAlert();
+//		    showAlert();
 				var index;
 				output = '<div data-role="collapsible-set">';
 				for (index = 0; index < data.rendelesek.length; ++index) {
 				   ids += data.rendelesek[index].id + ',';
 				   perc = Math.round((data.ido-data.rendelesek[index].ido)/60);
-				   output += '<div data-role="collapsible" data-iconpos="right"><h3>Új rendelés (<span class="ido">' + perc + ' perce</span>)</h3><p>';
+				   output += '<div data-role="collapsible" data-iconpos="right"><h3>Új rendelés (<span class="ido"><span id="t' + data.rendelesek[index].id + '">' + perc + '</span> perce</span>)</h3><p>';
            output += RendelesKiiras(data.rendelesek[index]);
            output += '<select data-inline="true"  data-native-menu="false" name="atid' + data.rendelesek[index].id + '" id="atid' + data.rendelesek[index].id + '" onchange="StatusChange(' + data.rendelesek[index].id + ',' + data.futar_id + ',\'va\')">';
 				   output += '<option>Megyek érte</option>';
@@ -144,6 +144,10 @@ function helyzet() {
 
 				if (output!='') {
 			  	  $("#two .content").html(output).trigger('create');
+
+            clearInterval(Idozito);
+            
+            Idozito = setInterval(IdoSzamitas, 60000);
 				}
 
 			} else {
@@ -213,6 +217,35 @@ function StatusChange(rendeles,futar,stat) {
     }
   })
 }
+
+function IdoSzamitas() {
+  var rendt;
+  
+  //rendelési idő számítása előre
+  rendt = ids.split(",");
+  for (var i = 0, len = rendt.length; i < len; i++) {
+    var ujido = $('#t'+rendt[i]).html();
+    ujido++;
+    $('#t'+rendt[i]).html(ujido);
+  }
+
+  //átvett idő számítása vissza
+  rendt = aids.split(",");
+  for (var i = 0, len = rendt.length; i < len; i++) {
+    var ujido = $('#t'+rendt[i]).html();
+    ujido--;
+    $('#t'+rendt[i]).html(ujido);
+  }
+
+  //visszaigazolt idő számítása vissza
+  rendt = vids.split(",");
+  for (var i = 0, len = rendt.length; i < len; i++) {
+    var ujido = $('#t'+rendt[i]).html();
+    ujido--;
+    $('#t'+rendt[i]).html(ujido);
+  }
+
+}
 	
 </script>    
 </head>
@@ -264,6 +297,7 @@ function StatusChange(rendeles,futar,stat) {
   var ids = '';
   var aids = '';
   var vids = '';
+  var Idozito;
 
 
   //felhasználónév és jelszó tárolása
@@ -272,7 +306,7 @@ function StatusChange(rendeles,futar,stat) {
   window.password = window.localStorage.getItem("password");
   $("#password").val(window.password);
 
-  window.plugin.backgroundMode.enable();
+//  window.plugin.backgroundMode.enable();
 
 </script>
 </body>
