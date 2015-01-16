@@ -85,22 +85,18 @@ function helyzet() {
 			if (data.futar_id>0) {
 			  output = '';
 			  
-              if (data.rendelesek != null) {
-	  		    ids = '';
-			    showAlert();
+       if (data.rendelesek != null) {
+ 		    ids = '';
+		    showAlert();
 				var index;
 				output = '<div data-role="collapsible-set">';
 				for (index = 0; index < data.rendelesek.length; ++index) {
 				   ids += data.rendelesek[index].id + ',';
 				   perc = Math.round((data.ido-data.rendelesek[index].ido)/60);
 				   output += '<div data-role="collapsible" data-iconpos="right"><h3>Új rendelés (<span class="ido">' + perc + ' perce</span>)</h3><p>';
-				   output += '<strong>' + data.rendelesek[index].etterem + '</strong><br /> ';
-				   output += data.rendelesek[index].varos + ', ';
-				   output += data.rendelesek[index].utca + ' ';
-				   output += data.rendelesek[index].hszam + '.<br />';
-				   output += data.rendelesek[index].ar + ' Ft<br /></p>';
-				   output += '<select data-inline="true"  data-native-menu="false" name="atid' + data.rendelesek[index].id + '" id="atid' + data.rendelesek[index].id + '" onchange="StatusChange(' + data.rendelesek[index].id + ',' + data.futar_id + ',\'va\')">';
-				     output += '<option>Megyek érte</option>';
+           output += RendelesKiiras(data.rendelesek[index]);
+           output += '<select data-inline="true"  data-native-menu="false" name="atid' + data.rendelesek[index].id + '" id="atid' + data.rendelesek[index].id + '" onchange="StatusChange(' + data.rendelesek[index].id + ',' + data.futar_id + ',\'va\')">';
+				   output += '<option>Megyek érte</option>';
            perc = parseInt(data.rendelesek[index].perc);
 				   for (i = perc; i <= 40; i+=5) { 
 				     output += '<option value="' + i + '">' + i + ' perc múlva</option>';
@@ -112,45 +108,37 @@ function helyzet() {
 			  } 
 			  
 
-              if (data.varakozok != null) {
-  	  		    vids = '';
+       if (data.varakozok != null) {
+		    vids = '';
 				var index;
 				output += '<div data-role="collapsible-set">';
 				for (index = 0; index < data.varakozok.length; ++index) {
 				   vids += data.varakozok[index].id + ',';
 				   perc = Math.round((data.ido-data.varakozok[index].ido)/60);
 				   output += '<div data-role="collapsible" data-iconpos="right"><h3>Várakozó rendelés (<span class="ido">' + perc + ' perce</span>)</h3><p>';
-				   output += '<strong>' + data.varakozok[index].etterem + '</strong><br /> ';
-				   output += data.varakozok[index].varos + ', ';
-				   output += data.varakozok[index].utca + ' ';
-				   output += data.varakozok[index].hszam + '.<br />';
-				   output += data.varakozok[index].ar + ' Ft<br />';
-				   output += '</p><button data-icon="check" data-inline="true" onclick="StatusChange(' + data.varakozok[index].id + ',' + data.futar_id + ',\'at\')">Átvettem</button></div>';
+           output += RendelesKiiras(data.varakozok[index]);
+           output += '</p><button data-icon="check" data-inline="true" onclick="StatusChange(' + data.varakozok[index].id + ',' + data.futar_id + ',\'at\')">Átvettem</button></div>';
 				}
 				output += '</div>';
 			  } 
 			  
 			  			  
 
-              if (data.atvettek != null) {
-  	  		    aids = '';
+      if (data.atvettek != null) {
+ 		    aids = '';
 				var index;
 				output += '<div data-role="collapsible-set">';
 				for (index = 0; index < data.atvettek.length; ++index) {
 				   aids += data.atvettek[index].id + ',';
 				   perc = Math.round((data.ido-data.atvettek[index].ido)/60);
 				   output += '<div data-role="collapsible" data-iconpos="right"><h3>Átvett rendelés (<span class="ido">' + perc + ' perce</span>)</h3><p>';
-				   output += '<strong>' + data.atvettek[index].etterem + '</strong><br /> ';
-				   output += data.atvettek[index].varos + ', ';
-				   output += data.atvettek[index].utca + ' ';
-				   output += data.atvettek[index].hszam + '.<br />';
-				   output += data.atvettek[index].ar + ' Ft<br />';
+           output += RendelesKiiras(data.atvettek[index]);
 				   output += '</p><button data-icon="check" data-inline="true" onclick="StatusChange(' + data.atvettek[index].id + ',' + data.futar_id + ',\'ki\')">Kiszállítottam</button></div>';
 				}
 				output += '</div>';
 			  } 
 			  
-  			    if (ids=='' && aids=='' && vids=='') {
+		    if (ids=='' && aids=='' && vids=='') {
 				  output = '  ';
 			    }
 
@@ -161,12 +149,33 @@ function helyzet() {
 			} else {
 				output = '<p><strong>Hiba!</strong></p>';
 				output += '<p>A felhasználónév vagy a jelszó nem megfelelő.</p>';
-                output += '<p><a href="#one" data-role="button" data-icon="back" data-inline="true" onclick="Back()">Vissza</a></p>';
-			  	$("#two .content").html(output).trigger('create');
+        output += '<p><a href="#one" data-role="button" data-icon="back" data-inline="true" onclick="Back()">Vissza</a></p>';
+		  	$("#two .content").html(output).trigger('create');
 			}
 		  }
 		});
 	}
+  
+  
+function RendelesKiiras(rendeles) {
+  var output = '<strong>' + rendeles.etterem + '</strong><br /> ';
+  output += rendeles.varos + ', ';
+  output += rendeles.utca + ' ';
+  output += rendeles.hszam;
+
+  if (rendeles.emelet != '') {
+    output += ' (' + rendeles.emelet + ')<br> ';
+  } else {
+    output += '<br> ';
+  }
+
+  if (rendeles.csengo != '') {
+    output += 'Kapucsengő: ' + rendeles.csengo + '<br> ';
+  } 
+          
+  output += '<strong>' + rendeles.ar + ' Ft</strong><br />';
+  return output;  
+}
 	
 function UserPassStore() {
   window.username = $("#username").val();
