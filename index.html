@@ -87,7 +87,7 @@ function helyzet() {
 			  
        if (data.rendelesek != null) {
  		    ids = '';
-//		    showAlert();
+		    showAlert();
 				var index;
 				output = '<div data-role="collapsible-set">';
 				for (index = 0; index < data.rendelesek.length; ++index) {
@@ -105,8 +105,16 @@ function helyzet() {
 				   output += '</div>';
 				}
 				output += '</div>';
+        
 			  } 
+        
+        if (output!='') {
+          clearInterval(IdozitoIds);
+          IdozitoIds = setInterval(IdoSzamitasIds, 60*1000);
+          $("#iholder").html(output).trigger('create');
+        }
 			  
+        output = '';
 
        if (data.varakozok != null) {
 		    vids = '';
@@ -114,15 +122,21 @@ function helyzet() {
 				output += '<div data-role="collapsible-set">';
 				for (index = 0; index < data.varakozok.length; ++index) {
 				   vids += data.varakozok[index].id + ',';
-				   perc = Math.round((data.ido-data.varakozok[index].ido)/60);
-				   output += '<div data-role="collapsible" data-iconpos="right"><h3>Várakozó rendelés (<span class="ido">' + perc + ' perce</span>)</h3><p>';
+				   perc = data.varakozok[index].perc - Math.round((data.ido - data.varakozok[index].ido)/60);
+				   output += '<div data-role="collapsible" data-iconpos="right"><h3>Várakozó rendelés (<span class="ido"><span id="t' + data.varakozok[index].id + '">' + perc + '</span> perc múlva kell odaérnem</span>)</h3><p>';
            output += RendelesKiiras(data.varakozok[index]);
            output += '</p><button data-icon="check" data-inline="true" onclick="StatusChange(' + data.varakozok[index].id + ',' + data.futar_id + ',\'at\')">Átvettem</button></div>';
 				}
 				output += '</div>';
 			  } 
 			  
-			  			  
+        if (output!='') {
+          clearInterval(IdozitoVids);
+          IdozitoVids = setInterval(IdoSzamitasVids, 60*1000);
+          $("#vholder").html(output).trigger('create');
+        }
+        
+        output = '';		  
 
       if (data.atvettek != null) {
  		    aids = '';
@@ -130,26 +144,20 @@ function helyzet() {
 				output += '<div data-role="collapsible-set">';
 				for (index = 0; index < data.atvettek.length; ++index) {
 				   aids += data.atvettek[index].id + ',';
-				   perc = Math.round((data.ido-data.atvettek[index].ido)/60);
-				   output += '<div data-role="collapsible" data-iconpos="right"><h3>Átvett rendelés (<span class="ido">' + perc + ' perce</span>)</h3><p>';
+				   perc = 30 - Math.round((data.ido-data.atvettek[index].ido)/60);
+				   output += '<div data-role="collapsible" data-iconpos="right"><h3>Átvett rendelés (<span class="ido"><span id="t' + data.atvettek[index].id + '">' + perc + '</span> percen belül kell kiszállítanom</span>)</h3><p>';
            output += RendelesKiiras(data.atvettek[index]);
 				   output += '</p><button data-icon="check" data-inline="true" onclick="StatusChange(' + data.atvettek[index].id + ',' + data.futar_id + ',\'ki\')">Kiszállítottam</button></div>';
 				}
 				output += '</div>';
 			  } 
+        
+        if (output!='') {
+          clearInterval(IdozitoAids);
+          IdozitoAids = setInterval(IdoSzamitasAids, 60*1000);
+          $("#aholder").html(output).trigger('create');
+        }
 			  
-		    if (ids=='' && aids=='' && vids=='') {
-				  output = '  ';
-			    }
-
-				if (output!='') {
-			  	  $("#two .content").html(output).trigger('create');
-
-            clearInterval(Idozito);
-            
-            Idozito = setInterval(IdoSzamitas, 60000);
-				}
-
 			} else {
 				output = '<p><strong>Hiba!</strong></p>';
 				output += '<p>A felhasználónév vagy a jelszó nem megfelelő.</p>';
@@ -218,33 +226,34 @@ function StatusChange(rendeles,futar,stat) {
   })
 }
 
-function IdoSzamitas() {
+function IdoSzamitasIds() {
   var rendt;
-  
-  //rendelési idő számítása előre
   rendt = ids.split(",");
   for (var i = 0, len = rendt.length; i < len; i++) {
     var ujido = $('#t'+rendt[i]).html();
     ujido++;
     $('#t'+rendt[i]).html(ujido);
   }
+}
 
-  //átvett idő számítása vissza
+function IdoSzamitasAids() {
+  var rendt;
   rendt = aids.split(",");
   for (var i = 0, len = rendt.length; i < len; i++) {
     var ujido = $('#t'+rendt[i]).html();
     ujido--;
     $('#t'+rendt[i]).html(ujido);
   }
+}
 
-  //visszaigazolt idő számítása vissza
+function IdoSzamitasVids() {
+  var rendt;
   rendt = vids.split(",");
   for (var i = 0, len = rendt.length; i < len; i++) {
     var ujido = $('#t'+rendt[i]).html();
     ujido--;
     $('#t'+rendt[i]).html(ujido);
   }
-
 }
 	
 </script>    
@@ -279,7 +288,10 @@ function IdoSzamitas() {
 
 </div><!-- /page one -->
 
-<!-- Start of first page: #one -->
+
+
+
+<!-- Start of second page: #two -->
 <div data-role="page" id="two">
 
 	<div data-role="header">
@@ -287,17 +299,25 @@ function IdoSzamitas() {
 	</div><!-- /header -->
 
 	<div role="main" class="content">
+  
+    <div id="iholder"></div>
+    
+    <div id="vholder"></div>
+
+    <div id="aholder"></div>    
         
 	</div><!-- /content -->
 
-</div><!-- /page one -->
+</div><!-- /page two -->
 
 
 <script type="text/javascript">
   var ids = '';
   var aids = '';
   var vids = '';
-  var Idozito;
+  var IdozitoIds;
+  var IdozitoAids;
+  var IdozitoVids;
 
 
   //felhasználónév és jelszó tárolása
@@ -306,7 +326,7 @@ function IdoSzamitas() {
   window.password = window.localStorage.getItem("password");
   $("#password").val(window.password);
 
-//  window.plugin.backgroundMode.enable();
+  window.plugin.backgroundMode.enable();
 
 </script>
 </body>
