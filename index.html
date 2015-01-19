@@ -216,11 +216,18 @@ function StatusChange(rendeles,futar,stat) {
     data: { id: rendeles, futar: futar, stat: stat, perc: perc },
     success: function(data) {
 	  if (data.siker == 'true') {
-		ids = '';
-		aids = '';
-		vids = '';
-		beolvasas('igen');
-        $.mobile.loading("hide");
+  		ids = '';
+	  	aids = '';
+		  vids = '';
+      if (stat=='ki') {
+        $("#aholder").html('').trigger('create');
+      } else if (stat=='at') {
+        $("#vholder").html('').trigger('create');
+      } else if (stat=='va') {
+        $("#iholder").html('').trigger('create');
+      }
+  		beolvasas('igen');
+      $.mobile.loading("hide");
 	  }
     }
   })
