@@ -10,7 +10,7 @@
 	<link rel="stylesheet" href="themes/jquery.mobile.structure-1.4.5.min.css" />
 	<link rel="stylesheet" href="themes/jquery.mobile.icons.min.css" />
     
-  <script type="text/javascript" src="phonegap.js"></script>
+<!--  <script type="text/javascript" src="phonegap.js"></script> -->
 	<script src="scripts/jquery-1.11.1.min.js"></script>
 
   <script>
@@ -32,8 +32,8 @@
 	
 	
     function showAlert() {
-        navigator.notification.beep(1);
-        navigator.notification.vibrate(1000);
+//        navigator.notification.beep(1);
+//        navigator.notification.vibrate(1000);
     }
 
 
@@ -102,6 +102,7 @@ function helyzet() {
 				     output += '<option value="' + i + '">' + i + ' perc múlva</option>';
 				   }
 				   output += '</select>';
+           output += '<button data-icon="delete" data-inline="true" onclick="StatusChange(' + data.rendelesek[index].id + ',' + data.futar_id + ',\'ne\')">Nem veszem át</button>';
 				   output += '</div>';
 				}
 				output += '</div>';
@@ -223,7 +224,7 @@ function StatusChange(rendeles,futar,stat) {
         $("#aholder").html('').trigger('create');
       } else if (stat=='at') {
         $("#vholder").html('').trigger('create');
-      } else if (stat=='va') {
+      } else if (stat=='va' || stat=='ne') {
         $("#iholder").html('').trigger('create');
       }
   		beolvasas('igen');
@@ -333,7 +334,7 @@ function IdoSzamitasVids() {
   window.password = window.localStorage.getItem("password");
   $("#password").val(window.password);
 
-  window.plugin.backgroundMode.enable();
+//  window.plugin.backgroundMode.enable();
 
 </script>
 </body>
