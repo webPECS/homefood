@@ -182,8 +182,18 @@ function RendelesKiiras(rendeles) {
     output += '<br> ';
   }
 
+  if (rendeles.telefon != '') {
+    output += 'Telefon: ' + rendeles.telefon + '<br> ';
+  } 
+
   if (rendeles.csengo != '') {
     output += 'Kapucsengő: ' + rendeles.csengo + '<br> ';
+  } 
+
+  if (rendeles.specialis != 0) {
+		if (rendeles.specialis == 1) { spec = 'Nagy adag'; } 
+		else if (rendeles.specialis == 2) { spec = 'Hűtendő'; } 		
+    output += 'Speciális szállítás: ' + spec + '<br> ';
   } 
           
   output += '<strong>' + rendeles.ar + ' Ft</strong><br />';
