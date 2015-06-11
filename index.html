@@ -125,7 +125,8 @@ function helyzet() {
 				output += '<div data-role="collapsible-set">';
 				for (index = 0; index < data.varakozok.length; ++index) {
 				   vids += data.varakozok[index].id + ',';
-				   perc = data.varakozok[index].perc - Math.round((data.ido - data.varakozok[index].ido)/60);
+//				   perc = data.varakozok[index].perc - Math.round((data.ido - data.varakozok[index].ido)/60);
+				   perc = Math.round((data.varakozok[index].perc - data.ido)/60);
 				   output += '<div data-role="collapsible" data-iconpos="right"><h3>Várakozó rendelés (<span class="ido"><span id="t' + data.varakozok[index].id + '">' + perc + '</span> perc múlva kell odaérnem</span>)</h3><p>';
            output += RendelesKiiras(data.varakozok[index]);
            output += '</p><button data-icon="check" data-inline="true" onclick="StatusChange(' + data.varakozok[index].id + ',' + data.futar_id + ',\'at\')">Átvettem</button></div>';
@@ -192,10 +193,18 @@ function RendelesKiiras(rendeles) {
     output += 'Kapucsengő: ' + rendeles.csengo + '<br> ';
   } 
 
-  if (rendeles.specialis != 0) {
+  if (rendeles.idozitett == 'I') {
+    output += 'Időzített rendelés: ' + rendeles.idozitett_idopont + '<br> ';
+  } 
+
+	if (rendeles.specialis != 0) {
 		if (rendeles.specialis == 1) { spec = 'Nagy adag'; } 
 		else if (rendeles.specialis == 2) { spec = 'Hűtendő'; } 		
     output += 'Speciális szállítás: ' + spec + '<br> ';
+  } 
+
+  if (rendeles.csengo != '') {
+    output += 'Megjegyzés: ' + rendeles.megjegyzes + '<br> ';
   } 
           
   output += '<strong>' + rendeles.ar + ' Ft</strong><br />';
