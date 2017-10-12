@@ -32,8 +32,8 @@
 	
 	  //telefon sípol és vibrál
     function showAlert() {
-//        navigator.notification.beep(1);
-//        navigator.notification.vibrate(1000);
+        navigator.notification.beep(1);
+        navigator.notification.vibrate(1000);
     }
 
     //string első szavával tér vissza
@@ -83,7 +83,6 @@ function helyzet() {
 	function beolvasas() {
 		var output = '';
 
-    console.log('most');
 		
 		$.ajax({
 		  url: 'http://www.homefood.hu/phonegap/uj_rendeles_van_e.php',
@@ -137,7 +136,7 @@ function helyzet() {
 				   vids += data.varakozok[index].id + ',';
 //				   perc = data.varakozok[index].perc - Math.round((data.ido - data.varakozok[index].ido)/60);
 				   perc = Math.round((data.varakozok[index].perc - data.ido)/60);
-				   output += '<div data-role="collapsible" data-iconpos="right"><h3>' + firstWord(data.rendelesek[index].etterem) + ' várakozó rendelés (<span class="ido"><span id="t' + data.varakozok[index].id + '">' + perc + '</span> perc múlva kell odaérnem</span>)</h3><p>';
+				   output += '<div data-role="collapsible" data-iconpos="right"><h3>' + firstWord(data.varakozok[index].etterem) + ' várakozó rendelés (<span class="ido"><span id="t' + data.varakozok[index].id + '">' + perc + '</span> perc múlva kell odaérnem</span>)</h3><p>';
            output += RendelesKiiras(data.varakozok[index]);
            output += '</p><button data-icon="check" data-inline="true" onclick="StatusChange(' + data.varakozok[index].id + ',' + data.futar_id + ',\'at\')">Átvettem</button></div>';
 				}
@@ -159,7 +158,7 @@ function helyzet() {
 				for (index = 0; index < data.atvettek.length; ++index) {
 				   aids += data.atvettek[index].id + ',';
 				   perc = 30 - Math.round((data.ido-data.atvettek[index].ido)/60);
-				   output += '<div data-role="collapsible" data-iconpos="right"><h3>' + firstWord(data.rendelesek[index].utca) + ' átvett rendelés (<span class="ido"><span id="t' + data.atvettek[index].id + '">' + perc + '</span> percen belül kell kiszállítanom</span>)</h3><p>';
+				   output += '<div data-role="collapsible" data-iconpos="right"><h3>' + firstWord(data.atvettek[index].utca) + ' átvett rendelés (<span class="ido"><span id="t' + data.atvettek[index].id + '">' + perc + '</span> percen belül kell kiszállítanom</span>)</h3><p>';
            output += RendelesKiiras(data.atvettek[index]);
 				   output += '</p><button data-icon="check" data-inline="true" onclick="StatusChange(' + data.atvettek[index].id + ',' + data.futar_id + ',\'ki\')">Kiszállítottam</button></div>';
 				}
@@ -366,8 +365,8 @@ function IdoSzamitasVids() {
   $("#password").val(window.password);
 
 
+  //amennyiben az eszköz készen áll, akkor background mode bekapcs
   document.addEventListener('deviceready', function () {
-      //cordova.plugins.backgroundMode is now available 
       cordova.plugins.backgroundMode.enable();
   }, false);
 
