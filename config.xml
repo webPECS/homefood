@@ -16,13 +16,6 @@
         webPECS
     </author>
 
-    <!--
-        If you do not want any permissions to be added to your app, add the
-        following tag to your config.xml; you will still have the INTERNET
-        permission on your app, which PhoneGap requires.
-    -->
-    <preference name="permissions" value="none"/>
-
     <!-- Customize your app and platform with the preference element. -->
     <preference name="phonegap-version"           value="cli-6.5.0" />      <!-- all: current version of PhoneGap -->
     <preference name="orientation"                value="portrait" />       <!-- all: default means both landscape and portrait are enabled -->
@@ -35,15 +28,15 @@
     <!-- Platforms -->
     <gap:platform name="android" />
 
-    <feature name="http://api.phonegap.com/1.0/geolocation"/>
-
-
     <!-- Core plugins -->
     <plugin name="cordova-plugin-device" spec="~1.1.6" />
-    <plugin name="cordova-plugin-console" spec="~1.0.7" />
+    <plugin name="cordova-plugin-console" spec="~1.1.0" />
     <plugin name="cordova-plugin-dialogs" spec="~1.3.3" />
     <plugin name="cordova-plugin-vibration" spec="~2.1.5" />
     <plugin name="cordova-plugin-network-information" spec="~1.3.3" />
+    <plugin name="cordova-plugin-geolocation" spec="~2.4.3" />
+
+    cordova plugin add org.apache.cordova.geolocation
 
     <!-- Third party plugins -->
     <gap:plugin name="cordova-plugin-background-mode" source="npm" />

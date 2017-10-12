@@ -10,7 +10,7 @@
 	<link rel="stylesheet" href="themes/jquery.mobile.structure-1.4.5.min.css" />
 	<link rel="stylesheet" href="themes/jquery.mobile.icons.min.css" />
     
-  <script type="text/javascript" src="phonegap.js"></script>
+  <script src="phonegap.js"></script>
 	<script src="scripts/jquery-1.11.1.min.js"></script>
 
   <script>
@@ -82,6 +82,8 @@ function helyzet() {
 	
 	function beolvasas() {
 		var output = '';
+
+    console.log('most');
 		
 		$.ajax({
 		  url: 'http://www.homefood.hu/phonegap/uj_rendeles_van_e.php',
