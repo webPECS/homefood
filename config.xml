@@ -35,6 +35,7 @@
     <plugin name="cordova-plugin-vibration" spec="~2.1.5" />
     <plugin name="cordova-plugin-network-information" spec="~1.3.3" />
     <plugin name="cordova-plugin-geolocation" spec="~2.4.3" />
+    <plugin name="cordova-plugin-whitelist" />
 
     <!-- Third party plugins -->
     <gap:plugin name="cordova-plugin-background-mode" source="npm" />
@@ -49,8 +50,6 @@
 
     <!-- Define app splash screen for each platform. -->
 
-
-    <access origin="*" /> <!-- allow local pages -->
-    <access origin="*://homefood.hu/*" />
+    <allow-navigation href="*://homefood.hu/*" />
 
 </widget>

@@ -32,8 +32,8 @@
 	
 	  //telefon sípol és vibrál
     function showAlert() {
-        navigator.notification.beep(1);
-        navigator.notification.vibrate(1000);
+//        navigator.notification.beep(1);
+//        navigator.notification.vibrate(1000);
     }
 
     //string első szavával tér vissza
@@ -365,7 +365,12 @@ function IdoSzamitasVids() {
   window.password = window.localStorage.getItem("password");
   $("#password").val(window.password);
 
-//  cordova.plugins.backgroundMode.enable();
+
+  document.addEventListener('deviceready', function () {
+      //cordova.plugins.backgroundMode is now available 
+      cordova.plugins.backgroundMode.enable();
+  }, false);
+
 
 </script>
 </body>
