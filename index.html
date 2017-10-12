@@ -30,12 +30,20 @@
         intervalId = setInterval('beolvasas()',15*1000);
     }
 	
-	
+	  //telefon sípol és vibrál
     function showAlert() {
         navigator.notification.beep(1);
         navigator.notification.vibrate(1000);
     }
 
+    //string első szavával tér vissza
+    function firstWord(str) {
+        let spacePosition = str.indexOf(' ');
+        if (spacePosition === -1)
+            return str;
+        else
+            return str.substr(0, spacePosition);
+    };
 
 
 var options = {
@@ -93,7 +101,7 @@ function helyzet() {
 				for (index = 0; index < data.rendelesek.length; ++index) {
 				   ids += data.rendelesek[index].id + ',';
 				   perc = Math.round((data.ido-data.rendelesek[index].ido)/60);
-				   output += '<div data-role="collapsible" data-iconpos="right"><h3>Új rendelés (<span class="ido"><span id="t' + data.rendelesek[index].id + '">' + perc + '</span> perce</span>)</h3><p>';
+				   output += '<div data-role="collapsible" data-iconpos="right"><h3>' + firstWord(data.rendelesek[index].etterem) + ' új rendelés (<span class="ido"><span id="t' + data.rendelesek[index].id + '">' + perc + '</span> perce</span>)</h3><p>';
            output += RendelesKiiras(data.rendelesek[index]);
            output += '<select data-inline="true"  data-native-menu="false" name="atid' + data.rendelesek[index].id + '" id="atid' + data.rendelesek[index].id + '" onchange="StatusChange(' + data.rendelesek[index].id + ',' + data.futar_id + ',\'va\')">';
 				   output += '<option>Megyek érte</option>';
@@ -127,7 +135,7 @@ function helyzet() {
 				   vids += data.varakozok[index].id + ',';
 //				   perc = data.varakozok[index].perc - Math.round((data.ido - data.varakozok[index].ido)/60);
 				   perc = Math.round((data.varakozok[index].perc - data.ido)/60);
-				   output += '<div data-role="collapsible" data-iconpos="right"><h3>Várakozó rendelés (<span class="ido"><span id="t' + data.varakozok[index].id + '">' + perc + '</span> perc múlva kell odaérnem</span>)</h3><p>';
+				   output += '<div data-role="collapsible" data-iconpos="right"><h3>' + firstWord(data.rendelesek[index].etterem) + ' várakozó rendelés (<span class="ido"><span id="t' + data.varakozok[index].id + '">' + perc + '</span> perc múlva kell odaérnem</span>)</h3><p>';
            output += RendelesKiiras(data.varakozok[index]);
            output += '</p><button data-icon="check" data-inline="true" onclick="StatusChange(' + data.varakozok[index].id + ',' + data.futar_id + ',\'at\')">Átvettem</button></div>';
 				}
@@ -149,7 +157,7 @@ function helyzet() {
 				for (index = 0; index < data.atvettek.length; ++index) {
 				   aids += data.atvettek[index].id + ',';
 				   perc = 30 - Math.round((data.ido-data.atvettek[index].ido)/60);
-				   output += '<div data-role="collapsible" data-iconpos="right"><h3>Átvett rendelés (<span class="ido"><span id="t' + data.atvettek[index].id + '">' + perc + '</span> percen belül kell kiszállítanom</span>)</h3><p>';
+				   output += '<div data-role="collapsible" data-iconpos="right"><h3>' + firstWord(data.rendelesek[index].utca) + ' átvett rendelés (<span class="ido"><span id="t' + data.atvettek[index].id + '">' + perc + '</span> percen belül kell kiszállítanom</span>)</h3><p>';
            output += RendelesKiiras(data.atvettek[index]);
 				   output += '</p><button data-icon="check" data-inline="true" onclick="StatusChange(' + data.atvettek[index].id + ',' + data.futar_id + ',\'ki\')">Kiszállítottam</button></div>';
 				}
